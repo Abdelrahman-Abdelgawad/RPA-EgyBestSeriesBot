@@ -6223,5 +6223,13 @@
         "runtimeIdentifierGraphPath": "C:\\Users\\hp\\AppData\\Local\\UiPath\\app-21.2.0-beta0044\\runtime.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file E:\\Projects\\RPA\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local\\nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

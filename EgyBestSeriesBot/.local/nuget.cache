@@ -80,5 +80,13 @@
     "C:\\Users\\hp\\.nuget\\packages\\uipath.uiautomation.activities\\20.10.9\\uipath.uiautomation.activities.20.10.9.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\uipath.vision\\2.2.0\\uipath.vision.2.2.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "filePath": "E:\\Projects\\RPA\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local",
+      "message": "Problem reading the cache file E:\\Projects\\RPA\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local\\nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
