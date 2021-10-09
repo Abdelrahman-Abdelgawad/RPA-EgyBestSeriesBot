@@ -5,6 +5,7 @@
   "dependencies": {
     "My_Edge_Libraries": "[1.0.0-alpha.2]",
     "UiPath.Excel.Activities": "[2.9.5]",
+    "UiPath.Form.Activities": "[1.7.0]",
     "UiPath.Mail.Activities": "[1.9.5]",
     "UiPath.System.Activities": "[20.10.3]",
     "UiPath.UIAutomation.Activities": "[20.10.9]"
