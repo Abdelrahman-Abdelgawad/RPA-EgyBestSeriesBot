@@ -3,6 +3,7 @@
     <x:Property Name="in_SeasonURL" Type="InArgument(x:String)" />
     <x:Property Name="in_ReqQuality" Type="InArgument(x:String)" />
     <x:Property Name="out_SeasonDownloadLinks" Type="OutArgument(x:String)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -42,7 +43,7 @@
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
-    <scg:List x:TypeArguments="AssemblyReference" Capacity="18">
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="36">
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
@@ -61,6 +62,15 @@
       <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:Annotation.AnnotationText="Description:&#xA;Process each episode in the current season. Then pass the downloadable links as an output.&#xA;&#xA;Pre-condition:&#xA;The passed season URL is correct.&#xA;&#xA;Post-condition:&#xA;All the episodes in the current season are processed successfully.&#xA;" DisplayName="EgyBest_ProcessSeason" sap:VirtualizedContainerService.HintSize="242,517" sap2010:WorkflowViewState.IdRef="Sequence_7">
@@ -97,7 +107,7 @@
               <x:Boolean x:Key="IsPinned">False</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <ui:RetryScope DisplayName="Retry Scope - Get all episodes" sap:VirtualizedContainerService.HintSize="755,240" sap2010:WorkflowViewState.IdRef="RetryScope_2" NumberOfRetries="3" RetryInterval="00:00:03">
+          <ui:RetryScope DisplayName="Retry Scope - Get all episodes" sap:VirtualizedContainerService.HintSize="755,240" sap2010:WorkflowViewState.IdRef="RetryScope_2" NumberOfRetries="[CInt(in_Config(&quot;NumOfRetries&quot;))]" RetryInterval="[TimeSpan.Parse(in_Config(&quot;RetryInterval&quot;).ToString)]">
             <ui:RetryScope.ActivityBody>
               <ActivityAction>
                 <Sequence DisplayName="Action - Retry Scope" sap:VirtualizedContainerService.HintSize="200,66" sap2010:WorkflowViewState.IdRef="Sequence_10">
@@ -128,7 +138,7 @@
                   </ui:BrowserScope>
                   <ui:UiElementExists DisplayName="Element Exists - EgyBest Logo" Exists="[IsEgyBestOpen]" sap:VirtualizedContainerService.HintSize="755,106" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
                     <ui:UiElementExists.Target>
-                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a597a815-563e-4b91-bb8a-dca636c7c040" InformativeScreenshot="3191e670f6588a995da4a6aa1ffbf6d6" Selector="&lt;html app='msedge.exe' /&gt;&#xD;&#xA;&lt;webctrl tag='A' class='logo vam' /&gt;&#xD;&#xA;">
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a597a815-563e-4b91-bb8a-dca636c7c040" InformativeScreenshot="3191e670f6588a995da4a6aa1ffbf6d6" Selector="&lt;html app='msedge.exe' /&gt;&#xA;&lt;webctrl tag='A' class='logo vam' /&gt;&#xA;">
                         <ui:Target.TimeoutMS>
                           <InArgument x:TypeArguments="x:Int32" />
                         </ui:Target.TimeoutMS>
@@ -204,7 +214,7 @@
                 </ActivityAction.Argument>
                 <Sequence DisplayName="Body - For each episode" sap:VirtualizedContainerService.HintSize="376,304" sap2010:WorkflowViewState.IdRef="Sequence_11">
                   <Sequence.Variables>
-                    <Variable x:TypeArguments="x:String" Name="EpisodeDownloadLinks" />
+                    <Variable x:TypeArguments="x:String" Name="EpisodeDownloadLink" />
                   </Sequence.Variables>
                   <sap:WorkflowViewStateService.ViewState>
                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -219,9 +229,12 @@
                       <InArgument x:TypeArguments="x:String" x:Key="in_EpisodeURL">
                         <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="row(&quot;URL&quot;).ToString" />
                       </InArgument>
-                      <OutArgument x:TypeArguments="x:String" x:Key="out_EpisodeDownloadLinks">
-                        <mva:VisualBasicReference x:TypeArguments="x:String" ExpressionText="EpisodeDownloadLinks" />
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_EpisodeDownloadLink">
+                        <mva:VisualBasicReference x:TypeArguments="x:String" ExpressionText="EpisodeDownloadLink" />
                       </OutArgument>
+                      <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">
+                        <mva:VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="in_Config" />
+                      </InArgument>
                     </ui:InvokeWorkflowFile.Arguments>
                   </ui:InvokeWorkflowFile>
                   <Assign DisplayName="Assign - out_SeasonDownloadLinks" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_1">
@@ -229,7 +242,7 @@
                       <OutArgument x:TypeArguments="x:String">[out_SeasonDownloadLinks]</OutArgument>
                     </Assign.To>
                     <Assign.Value>
-                      <InArgument x:TypeArguments="x:String" xml:space="preserve">[out_SeasonDownloadLinks + Environment.NewLine + "Episode "+ (EpisodesDT.Rows.Count - CurrentRowIdx).ToString + ":  " + EpisodeDownloadLinks.Trim]</InArgument>
+                      <InArgument x:TypeArguments="x:String" xml:space="preserve">[out_SeasonDownloadLinks + Environment.NewLine + "Episode"+ (EpisodesDT.Rows.Count - CurrentRowIdx).ToString + ":  " + EpisodeDownloadLink.Trim]</InArgument>
                     </Assign.Value>
                   </Assign>
                 </Sequence>
