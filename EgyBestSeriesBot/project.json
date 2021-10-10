@@ -3,7 +3,7 @@
   "description": "This bot takes a series' links from the user, along with the required seasons and quality. Then creates a folder for each series that contains text files with the downloadable links of the episodes for each season (All of these folders are created in the following path: \"C:\\EgyBestBot\").",
   "main": "Main.xaml",
   "dependencies": {
-    "My_Edge_Libraries": "[1.0.0-alpha.2]",
+    "Edge_Libraries": "[1.0.0-alpha.6]",
     "UiPath.Excel.Activities": "[2.9.5]",
     "UiPath.Form.Activities": "[1.7.0]",
     "UiPath.Mail.Activities": "[1.9.5]",

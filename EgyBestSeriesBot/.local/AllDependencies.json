@@ -96,6 +96,22 @@
           "lib/DocumentFormat.OpenXml.dll": {}
         }
       },
+      "Edge_Libraries/1.0.0-alpha.6": {
+        "type": "package",
+        "dependencies": {
+          "UiPath.Excel.Activities": "2.9.5",
+          "UiPath.Mail.Activities": "1.9.5",
+          "UiPath.System.Activities": "20.10.3",
+          "UiPath.UIAutomation.Activities": "20.10.9"
+        },
+        "compile": {
+          "lib/net45/_._": {}
+        },
+        "runtime": {
+          "lib/net45/My_Edge_Libraries.dll": {},
+          "lib/net45/My_Edge_Libraries_Expressions_10823190.dll": {}
+        }
+      },
       "Extended.Wpf.Toolkit/3.8.1": {
         "type": "package",
         "compile": {
@@ -558,22 +574,6 @@
         },
         "runtime": {
           "lib/Microsoft.VisualStudio.OLE.Interop.dll": {}
-        }
-      },
-      "My_Edge_Libraries/1.0.0-alpha.2": {
-        "type": "package",
-        "dependencies": {
-          "UiPath.Excel.Activities": "2.9.5",
-          "UiPath.Mail.Activities": "1.9.5",
-          "UiPath.System.Activities": "20.10.3",
-          "UiPath.UIAutomation.Activities": "20.10.9"
-        },
-        "compile": {
-          "lib/net45/_._": {}
-        },
-        "runtime": {
-          "lib/net45/My_Edge_Libraries.dll": {},
-          "lib/net45/My_Edge_Libraries_Expressions_10645546.dll": {}
         }
       },
       "NamedPipeWrapper/1.5.0": {
@@ -2043,6 +2043,22 @@
           "lib/DocumentFormat.OpenXml.dll": {}
         }
       },
+      "Edge_Libraries/1.0.0-alpha.6": {
+        "type": "package",
+        "dependencies": {
+          "UiPath.Excel.Activities": "2.9.5",
+          "UiPath.Mail.Activities": "1.9.5",
+          "UiPath.System.Activities": "20.10.3",
+          "UiPath.UIAutomation.Activities": "20.10.9"
+        },
+        "compile": {
+          "lib/net45/_._": {}
+        },
+        "runtime": {
+          "lib/net45/My_Edge_Libraries.dll": {},
+          "lib/net45/My_Edge_Libraries_Expressions_10823190.dll": {}
+        }
+      },
       "Extended.Wpf.Toolkit/3.8.1": {
         "type": "package",
         "compile": {
@@ -2505,22 +2521,6 @@
         },
         "runtime": {
           "lib/Microsoft.VisualStudio.OLE.Interop.dll": {}
-        }
-      },
-      "My_Edge_Libraries/1.0.0-alpha.2": {
-        "type": "package",
-        "dependencies": {
-          "UiPath.Excel.Activities": "2.9.5",
-          "UiPath.Mail.Activities": "1.9.5",
-          "UiPath.System.Activities": "20.10.3",
-          "UiPath.UIAutomation.Activities": "20.10.9"
-        },
-        "compile": {
-          "lib/net45/_._": {}
-        },
-        "runtime": {
-          "lib/net45/My_Edge_Libraries.dll": {},
-          "lib/net45/My_Edge_Libraries_Expressions_10645546.dll": {}
         }
       },
       "NamedPipeWrapper/1.5.0": {
@@ -4038,6 +4038,25 @@
         "lib/DocumentFormat.OpenXml.dll"
       ]
     },
+    "Edge_Libraries/1.0.0-alpha.6": {
+      "sha512": "rJO2FTzHhcbRmMZ5sTmIcCY5jz7mcqPms/qzWyHhlZgU1yboSj9mlJRwD2WjqSEnTgjrTumU2qVnNRz604VKoA==",
+      "type": "package",
+      "path": "edge_libraries/1.0.0-alpha.6",
+      "files": [
+        ".nupkg.metadata",
+        "edge_libraries.1.0.0-alpha.6.nupkg.sha512",
+        "edge_libraries.nuspec",
+        "lib/net45/.settings/Release/settings-1a5b880a.json",
+        "lib/net45/.settings/Release/settings-5190454b.json",
+        "lib/net45/.settings/Release/settings-590bb27b.json",
+        "lib/net45/.settings/Release/settings-9e9290da.json",
+        "lib/net45/.settings/Release/settings-a1b2dac1.json",
+        "lib/net45/.settings/Release/settings-afad0842.json",
+        "lib/net45/My_Edge_Libraries.dll",
+        "lib/net45/My_Edge_Libraries_Expressions_10823190.dll",
+        "lib/net45/project.json"
+      ]
+    },
     "Extended.Wpf.Toolkit/3.8.1": {
       "sha512": "eSD4/BY/xV29KaQi9A65VscpeU3rSrlvadIUepSx5ukeUajW3ph8+n4AlOswRMszbD4DDmrJ4g5O51bCUpiOjw==",
       "type": "package",
@@ -4657,25 +4676,6 @@
         "lib/Microsoft.VisualStudio.OLE.Interop.xml",
         "microsoft.visualstudio.ole.interop.7.10.6071.nupkg.sha512",
         "microsoft.visualstudio.ole.interop.nuspec"
-      ]
-    },
-    "My_Edge_Libraries/1.0.0-alpha.2": {
-      "sha512": "91nK6UPtUgT51Wy1pxPWlRTHId1Q8Siu928nPkBhrCSb7eTucKqaLgjOwILUQWOhKGbbx4yjvTD21FDW9c6pgw==",
-      "type": "package",
-      "path": "my_edge_libraries/1.0.0-alpha.2",
-      "files": [
-        ".nupkg.metadata",
-        "lib/net45/.settings/Release/settings-1a5b880a.json",
-        "lib/net45/.settings/Release/settings-5190454b.json",
-        "lib/net45/.settings/Release/settings-590bb27b.json",
-        "lib/net45/.settings/Release/settings-9e9290da.json",
-        "lib/net45/.settings/Release/settings-a1b2dac1.json",
-        "lib/net45/.settings/Release/settings-afad0842.json",
-        "lib/net45/My_Edge_Libraries.dll",
-        "lib/net45/My_Edge_Libraries_Expressions_10645546.dll",
-        "lib/net45/project.json",
-        "my_edge_libraries.1.0.0-alpha.2.nupkg.sha512",
-        "my_edge_libraries.nuspec"
       ]
     },
     "NamedPipeWrapper/1.5.0": {
@@ -6167,7 +6167,7 @@
   "projectFileDependencyGroups": {
     "": [],
     ".NETFramework,Version=v4.6.1": [
-      "My_Edge_Libraries >= 1.0.0-alpha.2 <= 1.0.0-alpha.2",
+      "Edge_Libraries >= 1.0.0-alpha.6 <= 1.0.0-alpha.6",
       "UiPath.Excel.Activities >= 2.9.5 <= 2.9.5",
       "UiPath.Form.Activities >= 1.7.0 <= 1.7.0",
       "UiPath.Mail.Activities >= 1.9.5 <= 1.9.5",
@@ -6189,10 +6189,10 @@
     "frameworks": {
       "net461": {
         "dependencies": {
-          "My_Edge_Libraries": {
+          "Edge_Libraries": {
             "include": "Runtime",
             "target": "Package",
-            "version": "[1.0.0-alpha.2, 1.0.0-alpha.2]"
+            "version": "[1.0.0-alpha.6, 1.0.0-alpha.6]"
           },
           "UiPath.Excel.Activities": {
             "include": "Runtime",
@@ -6223,13 +6223,5 @@
         "runtimeIdentifierGraphPath": "C:\\Users\\hp\\AppData\\Local\\UiPath\\app-21.2.0-beta0044\\runtime.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file E:\\Projects\\RPA\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local\\nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

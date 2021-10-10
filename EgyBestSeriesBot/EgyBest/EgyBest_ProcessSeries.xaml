@@ -3,6 +3,7 @@
     <x:Property Name="in_SeriesName" Type="InArgument(x:String)" />
     <x:Property Name="in_ReqQuality" Type="InArgument(x:String)" />
     <x:Property Name="in_SeasonsDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -69,8 +70,8 @@
       <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
       <AssemblyReference>UiPath.Mail</AssemblyReference>
       <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
-      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
       <AssemblyReference>System.Collections.Immutable</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:Annotation.AnnotationText="Description:&#xA;Process each required season in the current series. Then save the downloadable links in the current series folder.&#xA;&#xA;Pre-condition:&#xA;The passed seasons datatable and the name of the series are not empty.&#xA;&#xA;Post-condition:&#xA;All the required seasons in the current series are processed successfully.&#xA;" DisplayName="EgyBest_ProcessSeries" sap:VirtualizedContainerService.HintSize="242,547" sap2010:WorkflowViewState.IdRef="Sequence_7">
@@ -96,18 +97,18 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
       <TryCatch.Try>
-        <Sequence DisplayName="Sequence - Try" sap:VirtualizedContainerService.HintSize="797,1767" sap2010:WorkflowViewState.IdRef="Sequence_9">
+        <Sequence DisplayName="Sequence - Try" sap:VirtualizedContainerService.HintSize="797,1441" sap2010:WorkflowViewState.IdRef="Sequence_9">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">False</x:Boolean>
               <x:Boolean x:Key="IsPinned">False</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <If sap2010:Annotation.AnnotationText="Check if the passed Series name &amp; seasons datatable are not empty." Condition="[Not (String.IsNullOrEmpty(in_SeriesName) OrElse in_SeasonsDT.Rows.Count = 0)]" DisplayName="If - PreCond is met" sap:VirtualizedContainerService.HintSize="755,434" sap2010:WorkflowViewState.IdRef="If_1">
+          <If sap2010:Annotation.AnnotationText="Check if the passed Series name &amp; seasons datatable are not empty." Condition="[Not (String.IsNullOrEmpty(in_SeriesName) OrElse in_SeasonsDT.Rows.Count = 0)]" DisplayName="If - PreCond is met" sap:VirtualizedContainerService.HintSize="755,108" sap2010:WorkflowViewState.IdRef="If_1">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
-                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
                 <x:Boolean x:Key="IsPinned">False</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
@@ -141,7 +142,7 @@
               </Sequence>
             </If.Else>
           </If>
-          <ui:CreateDirectory ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Creates the current series folder, under the EgyBestBot folder in the 'C' drive." DisplayName="Create Folder - Current series" sap:VirtualizedContainerService.HintSize="755,121" sap2010:WorkflowViewState.IdRef="CreateDirectory_1" Path="[&quot;C:\EgyBestBot\&quot; + in_SeriesName]">
+          <ui:CreateDirectory ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Creates the current series folder, under the EgyBestBot folder." DisplayName="Create Folder - Current series" sap:VirtualizedContainerService.HintSize="755,121" sap2010:WorkflowViewState.IdRef="CreateDirectory_1" Path="[Path.Combine(in_Config(&quot;EgyBestBotFolderPath&quot;).ToString, in_SeriesName)]">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
@@ -167,12 +168,21 @@
                   </sap:WorkflowViewStateService.ViewState>
                   <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke EgyBest_ProcessSeason workflow" sap:VirtualizedContainerService.HintSize="334,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="EgyBest\EgyBest_ProcessSeason.xaml">
                     <ui:InvokeWorkflowFile.Arguments>
-                      <InArgument x:TypeArguments="x:String" x:Key="in_SeasonURL">[row("URL").ToString]</InArgument>
-                      <InArgument x:TypeArguments="x:String" x:Key="in_ReqQuality">[in_ReqQuality]</InArgument>
-                      <OutArgument x:TypeArguments="x:String" x:Key="out_SeasonDownloadLinks">[SeasonDownloadLinks]</OutArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_SeasonURL">
+                        <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="row(&quot;URL&quot;).ToString" />
+                      </InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_ReqQuality">
+                        <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="in_ReqQuality" />
+                      </InArgument>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_SeasonDownloadLinks">
+                        <mva:VisualBasicReference x:TypeArguments="x:String" ExpressionText="SeasonDownloadLinks" />
+                      </OutArgument>
+                      <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">
+                        <mva:VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="in_Config" />
+                      </InArgument>
                     </ui:InvokeWorkflowFile.Arguments>
                   </ui:InvokeWorkflowFile>
-                  <ui:WriteTextFile DisplayName="Write Text File - Current season file" FileName="[&quot;C:\EgyBestBot\&quot; + in_SeriesName + &quot;\&quot; + row(&quot;Name&quot;).ToString]" sap:VirtualizedContainerService.HintSize="334,132" sap2010:WorkflowViewState.IdRef="WriteTextFile_1" Text="[SeasonDownloadLinks.Trim]" />
+                  <ui:WriteTextFile DisplayName="Write Text File - Current season file" FileName="[Path.Combine(in_Config(&quot;EgyBestBotFolderPath&quot;).ToString, in_SeriesName, row(&quot;Name&quot;).ToString + &quot;.txt&quot;)]" sap:VirtualizedContainerService.HintSize="334,132" sap2010:WorkflowViewState.IdRef="WriteTextFile_1" Text="[SeasonDownloadLinks.Trim]" />
                 </Sequence>
               </ActivityAction>
             </ui:ForEachRow.Body>
@@ -184,7 +194,7 @@
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
           </ui:ForEachRow>
-          <If sap2010:Annotation.AnnotationText="Check if the series folder isn't empty." Condition="[Directory.GetFiles(&quot;C:\EgyBestBot\&quot; + in_SeriesName).Count &gt; 0]" DisplayName="If - PostCond is met" sap:VirtualizedContainerService.HintSize="755,434" sap2010:WorkflowViewState.IdRef="If_3">
+          <If sap2010:Annotation.AnnotationText="Check if the series folder isn't empty." Condition="[Directory.GetFiles(Path.Combine(in_Config(&quot;EgyBestBotFolderPath&quot;).ToString, in_SeriesName)).Count &gt; 0]" DisplayName="If - PostCond is met" sap:VirtualizedContainerService.HintSize="755,434" sap2010:WorkflowViewState.IdRef="If_3">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>

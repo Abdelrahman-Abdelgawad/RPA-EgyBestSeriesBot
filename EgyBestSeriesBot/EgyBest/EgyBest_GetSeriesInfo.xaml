@@ -3,6 +3,7 @@
     <x:Property Name="out_SeriesName" Type="OutArgument(x:String)" />
     <x:Property Name="out_ReqQuality" Type="OutArgument(x:String)" />
     <x:Property Name="out_SeasonsDT" Type="OutArgument(sd:DataTable)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -43,7 +44,7 @@
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
-    <scg:List x:TypeArguments="AssemblyReference" Capacity="28">
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="56">
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
@@ -71,10 +72,11 @@
       <AssemblyReference>UiPath.Mail</AssemblyReference>
       <AssemblyReference>UiPath.Excel</AssemblyReference>
       <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>System.Collections.Immutable</AssemblyReference>
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Description:&#xA;Gets the following info from the user: (Series link, required seasons and required quality). Then scraps the required seasons and pass the information as output arguments.&#xA;&#xA;Pre-condition:&#xA;MSEdge is open.&#xA;&#xA;Post-condition:&#xA;Output arguments are in a correct format.&#xD;&#xA;" DisplayName="EgyBest_GetSeriesInfo" sap:VirtualizedContainerService.HintSize="242,547" sap2010:WorkflowViewState.IdRef="Sequence_7">
+  <Sequence sap2010:Annotation.AnnotationText="Description:&#xA;Gets the following info from the user: (Series link, required seasons and required quality). Then scraps the required seasons and pass the information as output arguments.&#xA;&#xA;Pre-condition:&#xA;MSEdge is open.&#xA;&#xA;Post-condition:&#xA;Output arguments are in a correct format.&#xA;" DisplayName="EgyBest_GetSeriesInfo" sap:VirtualizedContainerService.HintSize="242,547" sap2010:WorkflowViewState.IdRef="Sequence_7">
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -89,7 +91,7 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </ui:LogMessage>
-    <TryCatch DisplayName="Try Catch - GetSeriesInfo" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+    <TryCatch DisplayName="Try Catch - GetSeriesInfo" sap:VirtualizedContainerService.HintSize="438,489" sap2010:WorkflowViewState.IdRef="TryCatch_1">
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
           <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -97,39 +99,27 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
       <TryCatch.Try>
-        <ui:RetryScope DisplayName="Retry Scope - GetSeriesInfo" sap:VirtualizedContainerService.HintSize="418,1601" sap2010:WorkflowViewState.IdRef="RetryScope_1" NumberOfRetries="3" RetryInterval="00:00:03">
+        <ui:RetryScope DisplayName="Retry Scope - GetSeriesInfo" sap:VirtualizedContainerService.HintSize="334,240" sap2010:WorkflowViewState.IdRef="RetryScope_1" NumberOfRetries="[CInt(in_Config(&quot;NumOfRetries&quot;))]" RetryInterval="[TimeSpan.Parse(in_Config(&quot;RetryInterval&quot;).ToString)]">
           <ui:RetryScope.ActivityBody>
             <ActivityAction>
-              <Sequence DisplayName="Action" sap:VirtualizedContainerService.HintSize="889,2411" sap2010:WorkflowViewState.IdRef="Sequence_8">
+              <Sequence DisplayName="Action" sap:VirtualizedContainerService.HintSize="200,66" sap2010:WorkflowViewState.IdRef="Sequence_8">
                 <Sequence.Variables>
-                  <Variable x:TypeArguments="x:Boolean" Name="IsUserFormDismissed">
-                    <Variable.Default>
-                      <Literal x:TypeArguments="x:Boolean" />
-                    </Variable.Default>
-                  </Variable>
+                  <Variable x:TypeArguments="x:Boolean" Default="False" Name="IsUserFormDismissed" />
                   <Variable x:TypeArguments="x:String" Name="SeriesLink" />
                   <Variable x:TypeArguments="x:String" Name="ReqSeasons" />
-                  <Variable x:TypeArguments="x:String" Name="DismissMsg">
-                    <Variable.Default>
-                      <Literal x:TypeArguments="x:String">**This input dialog CANNOT be dismissed**</Literal>
-                    </Variable.Default>
-                  </Variable>
                   <Variable x:TypeArguments="sd:DataTable" Default="[New System.Data.DataTable]" Name="TempSeasonsDT" />
                   <Variable x:TypeArguments="x:Int32" Name="SeasonsNum" />
-                  <Variable x:TypeArguments="x:Int32" sap2010:Annotation.AnnotationText="Points at the index of the current season of the output data table." Name="CurrentSeasonIdxPtr">
-                    <Variable.Default>
-                      <Literal x:TypeArguments="x:Int32" />
-                    </Variable.Default>
-                  </Variable>
+                  <Variable x:TypeArguments="x:Int32" sap2010:Annotation.AnnotationText="contains the index of the current season of the output data table." Default="0" Name="CurrentSeasonIdx" />
                 </Sequence.Variables>
                 <sap:WorkflowViewStateService.ViewState>
                   <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
                   </scg:Dictionary>
                 </sap:WorkflowViewStateService.ViewState>
-                <ui:InterruptibleDoWhile sap2010:Annotation.AnnotationText="Keep showing the user input dialog untill the user fill the required data. &#xD;&#xA;&#xD;&#xA;Note: (Dissmissed) varaible of the create form activity only updated once." DisplayName="Do While - The user input dialog" sap:VirtualizedContainerService.HintSize="847,393" sap2010:WorkflowViewState.IdRef="InterruptibleDoWhile_1">
+                <ui:InterruptibleDoWhile sap2010:Annotation.AnnotationText="Keep showing the user input dialog untill the user fill the required data. &#xA;&#xA;Note: (Dissmissed) varaible of the create form activity only updated once." DisplayName="Do While - The user input dialog" sap:VirtualizedContainerService.HintSize="847,480" sap2010:WorkflowViewState.IdRef="InterruptibleDoWhile_1">
                   <ui:InterruptibleDoWhile.Body>
-                    <ufa:FormActivity CreateFormActivityFileName="{x:Null}" CreateFormActivityFilePath="{x:Null}" FormFieldsInputData="{x:Null}" FormFieldsOutputData="{x:Null}" IconPath="{x:Null}" LocalCSSFilePath="{x:Null}" SelectedButton="{x:Null}" TimeoutInSeconds="{x:Null}" WindowPositionLeft="{x:Null}" WindowPositionTop="{x:Null}" CreateFormId="bd3f7599-4f18-4aad-ae4e-6599e160c3aa" DisableMaximizeButton="False" DisableMinimizeButton="False" DisableSanitize="False" Dismissed="[IsUserFormDismissed]" DisplayName="Create Form - Series Info" FormHeight="480" FormSchema="%[{&quot;tag&quot;:&quot;h1&quot;,&quot;refreshOnChange&quot;:true,&quot;key&quot;:&quot;DismissMsg&quot;,&quot;input&quot;:false,&quot;tableView&quot;:false,&quot;label&quot;:&quot;Label&quot;,&quot;type&quot;:&quot;label&quot;},{&quot;label&quot;:&quot;Series URL&quot;,&quot;placeholder&quot;:&quot;Enter the required series link..&quot;,&quot;tableView&quot;:true,&quot;validate&quot;:{&quot;required&quot;:true,&quot;pattern&quot;:&quot;^(https://)+.+(\\.egybest\\.)+.+(/series/)+.+.*$&quot;,&quot;customMessage&quot;:&quot;Please make sure that you entered a correct egybest series link e.g.(https://vega.egybest.pw/series/the-queens-gambit/)  &quot;},&quot;errorLabel&quot;:&quot;Please make sure that you entered a correct egybest series link e.g.(https://vega.egybest.pw/series/the-queens-gambit/)  &quot;,&quot;key&quot;:&quot;Series_URL&quot;,&quot;type&quot;:&quot;textfield&quot;,&quot;input&quot;:true},{&quot;label&quot;:&quot;Required Seasons&quot;,&quot;placeholder&quot;:&quot;Separate the required seasons numbers with a ',' e.g.(1,2,3,...)&quot;,&quot;description&quot;:&quot;If left empty, all seasons will be processed.&quot;,&quot;tableView&quot;:true,&quot;validate&quot;:{&quot;pattern&quot;:&quot;^(\\d+,)*\\d+$&quot;,&quot;customMessage&quot;:&quot;Make sure to separate the numbers with comma.&quot;},&quot;errorLabel&quot;:&quot;Make sure to separate the numbers with comma.&quot;,&quot;key&quot;:&quot;ReqSeasons&quot;,&quot;type&quot;:&quot;textfield&quot;,&quot;input&quot;:true},{&quot;label&quot;:&quot;Quality&quot;,&quot;placeholder&quot;:&quot;Enter the required quality..&quot;,&quot;description&quot;:&quot;If left empty, the heighst available quality for each episode will be selected.&quot;,&quot;tableView&quot;:true,&quot;validate&quot;:{&quot;pattern&quot;:&quot;^\\d+$&quot;,&quot;customMessage&quot;:&quot;Make sure to input a valid quality e.g.(480|720|240)&quot;},&quot;errorLabel&quot;:&quot;Make sure to input a valid quality e.g.(480|720|240)&quot;,&quot;key&quot;:&quot;Quality&quot;,&quot;type&quot;:&quot;textfield&quot;,&quot;input&quot;:true},{&quot;type&quot;:&quot;button&quot;,&quot;label&quot;:&quot;Submit&quot;,&quot;key&quot;:&quot;submit&quot;,&quot;disableOnInvalid&quot;:true,&quot;input&quot;:true,&quot;tableView&quot;:false}]" FormTheme="{}{&quot;Activities&quot;:[&quot;FORMS&quot;],&quot;Id&quot;:&quot;100200&quot;,&quot;Name&quot;:&quot;Paper&quot;,&quot;BaseCss&quot;:&quot;../../assets/css/themes/paper.bootstrap.min.css&quot;,&quot;ImageSrc&quot;:&quot;../../assets/themeicons/paper.png&quot;,&quot;OverrideCssUrl&quot;:&quot;&quot;,&quot;UserStyleOverrides&quot;:&quot;&quot;,&quot;Properties&quot;:&quot;&quot;,&quot;IsCustomTheme&quot;:false,&quot;Version&quot;:1,&quot;ThemeVersion&quot;:1}" FormTitle="EgyBest, Series Info" FormWidth="600" GenerateInputFields="False" sap:VirtualizedContainerService.HintSize="204,141" sap2010:WorkflowViewState.IdRef="FormActivity_1" IsReadOnly="False" MaxColumnsForSchemaGeneration="6" RunDoBlockFirst="False" RunInIsolatedMode="False" StartAsMinimized="False">
+                    <ufa:FormActivity CreateFormActivityFileName="{x:Null}" CreateFormActivityFilePath="{x:Null}" FormFieldsInputData="{x:Null}" FormFieldsOutputData="{x:Null}" IconPath="{x:Null}" LocalCSSFilePath="{x:Null}" MaxColumnsForSchemaGeneration="{x:Null}" SelectedButton="{x:Null}" TimeoutInSeconds="{x:Null}" WindowPositionLeft="{x:Null}" WindowPositionTop="{x:Null}" sap2010:Annotation.AnnotationText="Get the following info from the user:&#xA;- Series link (Required).&#xA;- Required seasons.&#xA;- Required quality." CreateFormId="bd3f7599-4f18-4aad-ae4e-6599e160c3aa" DisableMaximizeButton="False" DisableMinimizeButton="False" DisableSanitize="False" Dismissed="[IsUserFormDismissed]" DisplayName="Create Form - Series Info" FormHeight="[Cint(in_Config(&quot;SeriesInfoFormHeight&quot;))]" FormSchema="%[{&quot;tag&quot;:&quot;h1&quot;,&quot;refreshOnChange&quot;:true,&quot;key&quot;:&quot;DismissMsg&quot;,&quot;input&quot;:false,&quot;tableView&quot;:false,&quot;label&quot;:&quot;Label&quot;,&quot;type&quot;:&quot;label&quot;},{&quot;label&quot;:&quot;Series URL&quot;,&quot;placeholder&quot;:&quot;Enter the required series link..&quot;,&quot;tableView&quot;:true,&quot;validate&quot;:{&quot;required&quot;:true,&quot;pattern&quot;:&quot;^(https://)+.+(\\.egybest\\.)+.+(/series/)+.+.*$&quot;,&quot;customMessage&quot;:&quot;Please make sure that you entered a correct egybest series link e.g.(https://vega.egybest.pw/series/the-queens-gambit/)  &quot;},&quot;errorLabel&quot;:&quot;Please make sure that you entered a correct egybest series link e.g.(https://vega.egybest.pw/series/the-queens-gambit/)  &quot;,&quot;key&quot;:&quot;Series_URL&quot;,&quot;type&quot;:&quot;textfield&quot;,&quot;input&quot;:true},{&quot;label&quot;:&quot;Required Seasons&quot;,&quot;placeholder&quot;:&quot;Separate the required seasons numbers with a ',' e.g.(1,2,3,...)&quot;,&quot;description&quot;:&quot;If left empty, all seasons will be processed.&quot;,&quot;tableView&quot;:true,&quot;validate&quot;:{&quot;pattern&quot;:&quot;^(\\d+,)*\\d+$&quot;,&quot;customMessage&quot;:&quot;Make sure to separate the numbers with comma.&quot;},&quot;errorLabel&quot;:&quot;Make sure to separate the numbers with comma.&quot;,&quot;key&quot;:&quot;ReqSeasons&quot;,&quot;type&quot;:&quot;textfield&quot;,&quot;input&quot;:true},{&quot;label&quot;:&quot;Quality&quot;,&quot;placeholder&quot;:&quot;Enter the required quality..&quot;,&quot;description&quot;:&quot;If left empty, the heighst available quality for each episode will be selected.&quot;,&quot;tableView&quot;:true,&quot;validate&quot;:{&quot;pattern&quot;:&quot;^\\d+$&quot;,&quot;customMessage&quot;:&quot;Make sure to input a valid quality e.g.(480|720|240)&quot;},&quot;errorLabel&quot;:&quot;Make sure to input a valid quality e.g.(480|720|240)&quot;,&quot;key&quot;:&quot;Quality&quot;,&quot;type&quot;:&quot;textfield&quot;,&quot;input&quot;:true},{&quot;type&quot;:&quot;button&quot;,&quot;label&quot;:&quot;Submit&quot;,&quot;key&quot;:&quot;submit&quot;,&quot;disableOnInvalid&quot;:true,&quot;input&quot;:true,&quot;tableView&quot;:false}]" FormTheme="{}{&quot;Activities&quot;:[&quot;FORMS&quot;],&quot;Id&quot;:&quot;100200&quot;,&quot;Name&quot;:&quot;Paper&quot;,&quot;BaseCss&quot;:&quot;../../assets/css/themes/paper.bootstrap.min.css&quot;,&quot;ImageSrc&quot;:&quot;../../assets/themeicons/paper.png&quot;,&quot;OverrideCssUrl&quot;:&quot;&quot;,&quot;UserStyleOverrides&quot;:&quot;&quot;,&quot;Properties&quot;:&quot;&quot;,&quot;IsCustomTheme&quot;:false,&quot;Version&quot;:1,&quot;ThemeVersion&quot;:1}" FormTitle="[in_Config(&quot;SeriesInfoFormTitle&quot;).ToString]" FormWidth="[Cint(in_Config(&quot;SeriesInfoFormWidth&quot;))]" GenerateInputFields="False" sap:VirtualizedContainerService.HintSize="204,228" sap2010:WorkflowViewState.IdRef="FormActivity_1" IsReadOnly="False" RunDoBlockFirst="False" RunInIsolatedMode="False" StartAsMinimized="False">
                       <ufa:FormActivity.Body>
                         <ActivityAction x:TypeArguments="scg:Dictionary(x:String, x:Object)" />
                       </ufa:FormActivity.Body>
@@ -149,9 +139,14 @@
                           <mva:VisualBasicReference x:TypeArguments="x:String" ExpressionText="ReqSeasons" />
                         </OutArgument>
                         <InArgument x:TypeArguments="x:String" x:Key="DismissMsg">
-                          <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="if(IsUserFormDismissed, DismissMsg, &quot;&quot;)" />
+                          <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="If(IsUserFormDismissed, in_Config(&quot;SeriesInfoFormDismissMsg&quot;).ToString, String.Empty)" />
                         </InArgument>
                       </ufa:FormActivity.FormFieldsCollection>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
                     </ufa:FormActivity>
                   </ui:InterruptibleDoWhile.Body>
                   <ui:InterruptibleDoWhile.Condition>
@@ -163,7 +158,7 @@
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
                 </ui:InterruptibleDoWhile>
-                <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" sap2010:Annotation.AnnotationText="Navigates to the input series link." BrowserType="Edge" DisplayName="Attach Browser - MSEdge" sap:VirtualizedContainerService.HintSize="847,236" sap2010:WorkflowViewState.IdRef="BrowserScope_1" InformativeScreenshot="9f49834f3166e756ee1022fa63550938" Selector="&lt;html app='msedge.exe' /&gt;&#xD;&#xA;">
+                <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" sap2010:Annotation.AnnotationText="Navigates to the input series link." BrowserType="Edge" DisplayName="Attach Browser - MSEdge" sap:VirtualizedContainerService.HintSize="847,236" sap2010:WorkflowViewState.IdRef="BrowserScope_1" InformativeScreenshot="9f49834f3166e756ee1022fa63550938" Selector="&lt;html app='msedge.exe' /&gt;&#xA;">
                   <ui:BrowserScope.Body>
                     <ActivityAction x:TypeArguments="x:Object">
                       <ActivityAction.Argument>
@@ -214,7 +209,7 @@
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
                 </ui:ExtractData>
-                <ui:MultipleAssign sap2010:Annotation.AnnotationText="- Copying the scrapped data table into the output data table.&#xD;&#xA;&#xD;&#xA;- Getting the total number of seasons." DisplayName="Multiple Assign - Copy DT &amp; Get seasons num" sap:VirtualizedContainerService.HintSize="847,201" sap2010:WorkflowViewState.IdRef="MultipleAssign_1">
+                <ui:MultipleAssign sap2010:Annotation.AnnotationText="- Copying the scrapped data table into the output data table.&#xA;&#xA;- Getting the total number of seasons." DisplayName="Multiple Assign - Copy DT &amp; Get seasons num" sap:VirtualizedContainerService.HintSize="847,201" sap2010:WorkflowViewState.IdRef="MultipleAssign_1">
                   <ui:MultipleAssign.AssignOperations>
                     <scg:List x:TypeArguments="ui:AssignOperation" Capacity="4">
                       <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_1">
@@ -222,7 +217,7 @@
                           <OutArgument x:TypeArguments="sd:DataTable">[out_SeasonsDT]</OutArgument>
                         </ui:AssignOperation.To>
                         <ui:AssignOperation.Value>
-                          <InArgument x:TypeArguments="sd:DataTable">[TempSeasonsDT.Copy()]</InArgument>
+                          <InArgument x:TypeArguments="sd:DataTable">[TempSeasonsDT.Copy]</InArgument>
                         </ui:AssignOperation.Value>
                       </ui:AssignOperation>
                       <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_2">
@@ -243,13 +238,13 @@
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
                 </ui:MultipleAssign>
-                <ui:ForEachRow CurrentIndex="{x:Null}" sap2010:Annotation.AnnotationText="Loops through out the scrapped seasons data table to match only the seasons required by the user." DataTable="[TempSeasonsDT]" DisplayName="For Each Row - In the scrapped data table" sap:VirtualizedContainerService.HintSize="847,853" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+                <ui:ForEachRow CurrentIndex="{x:Null}" sap2010:Annotation.AnnotationText="Loops through out the scrapped seasons data table to match only the seasons required by the user." DataTable="[TempSeasonsDT]" DisplayName="For Each Row - In the scrapped data table" sap:VirtualizedContainerService.HintSize="847,894" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
                   <ui:ForEachRow.Body>
                     <ActivityAction x:TypeArguments="sd:DataRow">
                       <ActivityAction.Argument>
                         <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
                       </ActivityAction.Argument>
-                      <If sap2010:Annotation.AnnotationText="Checks if the current season is required by the user;&#xA;If so, keep it.&#xA;Else, delete it." Condition="[ReqSeasons.Split(&quot;,&quot;c).Contains(SeasonsNum.ToString)]" DisplayName="If - The current season is required" sap:VirtualizedContainerService.HintSize="797,674" sap2010:WorkflowViewState.IdRef="If_3">
+                      <If sap2010:Annotation.AnnotationText="Checks if the current season is required by the user;&#xA;If so, keep it.&#xA;Else, delete it." Condition="[String.IsNullOrEmpty(ReqSeasons) OrElse ReqSeasons.Split(&quot;,&quot;c).Contains(SeasonsNum.ToString)]" DisplayName="If - The current season is required" sap:VirtualizedContainerService.HintSize="797,715" sap2010:WorkflowViewState.IdRef="If_3">
                         <sap:WorkflowViewStateService.ViewState>
                           <scg:Dictionary x:TypeArguments="x:String, x:Object">
                             <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
@@ -258,30 +253,30 @@
                           </scg:Dictionary>
                         </sap:WorkflowViewStateService.ViewState>
                         <If.Then>
-                          <Sequence DisplayName="Sequence - Required season" sap:VirtualizedContainerService.HintSize="376,451" sap2010:WorkflowViewState.IdRef="Sequence_21">
+                          <Sequence DisplayName="Sequence - Required season" sap:VirtualizedContainerService.HintSize="376,500" sap2010:WorkflowViewState.IdRef="Sequence_21">
                             <sap:WorkflowViewStateService.ViewState>
                               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                               </scg:Dictionary>
                             </sap:WorkflowViewStateService.ViewState>
                             <ui:LogMessage DisplayName="Log Message - Required season" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Trace" Message="[&quot;EgyBest_GetSeriesInfo, The user required season &quot; + SeasonsNum.ToString]" />
-                            <ui:MultipleAssign sap2010:Annotation.AnnotationText="- Renaming the season name in the output data table.&#xA;&#xA;- Incrementing the value of the top pointer (which points to the first unrenamed element in the DT)&#xA;&#xA;- Decrementing the value of the seasons number by one to process the next season." DisplayName="Multiple Assign - Rename &amp; Update indexes" sap:VirtualizedContainerService.HintSize="334,228" sap2010:WorkflowViewState.IdRef="MultipleAssign_3">
+                            <ui:MultipleAssign sap2010:Annotation.AnnotationText="- Renaming the season name in the output data table.&#xA;&#xA;- Incrementing the value of the top pointer (which points to the first unrenamed element in the DT)&#xA;&#xA;- Decrementing the value of the seasons number by one to process the next season." DisplayName="Multiple Assign - Rename &amp; Update indexes" sap:VirtualizedContainerService.HintSize="334,277" sap2010:WorkflowViewState.IdRef="MultipleAssign_3">
                               <ui:MultipleAssign.AssignOperations>
                                 <scg:List x:TypeArguments="ui:AssignOperation" Capacity="4">
                                   <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_6">
                                     <ui:AssignOperation.To>
-                                      <OutArgument x:TypeArguments="x:Object">[out_SeasonsDT(CurrentSeasonIdxPtr)("Name")]</OutArgument>
+                                      <OutArgument x:TypeArguments="x:Object">[out_SeasonsDT(CurrentSeasonIdx)("Name")]</OutArgument>
                                     </ui:AssignOperation.To>
                                     <ui:AssignOperation.Value>
-                                      <InArgument x:TypeArguments="x:Object">["Season " + SeasonsNum.ToString]</InArgument>
+                                      <InArgument x:TypeArguments="x:Object">["Season" + SeasonsNum.ToString]</InArgument>
                                     </ui:AssignOperation.Value>
                                   </ui:AssignOperation>
                                   <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_7">
                                     <ui:AssignOperation.To>
-                                      <OutArgument x:TypeArguments="x:Int32">[CurrentSeasonIdxPtr]</OutArgument>
+                                      <OutArgument x:TypeArguments="x:Int32">[CurrentSeasonIdx]</OutArgument>
                                     </ui:AssignOperation.To>
                                     <ui:AssignOperation.Value>
-                                      <InArgument x:TypeArguments="x:Int32">[CurrentSeasonIdxPtr +1]</InArgument>
+                                      <InArgument x:TypeArguments="x:Int32">[CurrentSeasonIdx +1]</InArgument>
                                     </ui:AssignOperation.Value>
                                   </ui:AssignOperation>
                                   <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_8">
@@ -297,7 +292,7 @@
                               <sap:WorkflowViewStateService.ViewState>
                                 <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                   <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
-                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                   <x:Boolean x:Key="IsPinned">False</x:Boolean>
                                 </scg:Dictionary>
                               </sap:WorkflowViewStateService.ViewState>
@@ -312,7 +307,7 @@
                               </scg:Dictionary>
                             </sap:WorkflowViewStateService.ViewState>
                             <ui:LogMessage DisplayName="Log Message - Unrequired season" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Trace" Message="[&quot;EgyBest_GetSeriesInfo, The user didn't require season &quot; + SeasonsNum.ToString]" />
-                            <ui:RemoveDataRow Row="{x:Null}" sap2010:Annotation.AnnotationText="Removes the row with the corresponding index from the output data table." DataTable="[out_SeasonsDT]" DisplayName="Remove Data Row - From output seasons DT" sap:VirtualizedContainerService.HintSize="334,79" sap2010:WorkflowViewState.IdRef="RemoveDataRow_3" RowIndex="[CurrentSeasonIdxPtr]">
+                            <ui:RemoveDataRow Row="{x:Null}" sap2010:Annotation.AnnotationText="Removes the row with the corresponding index from the output data table." DataTable="[out_SeasonsDT]" DisplayName="Remove Data Row - From output seasons DT" sap:VirtualizedContainerService.HintSize="334,79" sap2010:WorkflowViewState.IdRef="RemoveDataRow_3" RowIndex="[CurrentSeasonIdx]">
                               <sap:WorkflowViewStateService.ViewState>
                                 <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                   <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
@@ -345,7 +340,7 @@
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
                 </ui:ForEachRow>
-                <If sap2010:Annotation.AnnotationText="Checks if one of the required output arguments has incorrect value;&#xD;&#xA;If so, Throw a system exception.&#xD;&#xA;Else, continue." Condition="[String.IsNullOrEmpty(out_SeriesName) Or out_SeasonsDT.Rows.Count = 0]" DisplayName="If - Checking post condition" sap:VirtualizedContainerService.HintSize="847,153" sap2010:WorkflowViewState.IdRef="If_2">
+                <If sap2010:Annotation.AnnotationText="Checks if one of the required output arguments has incorrect value;&#xA;If so, Throw a system exception.&#xA;Else, continue." Condition="[String.IsNullOrEmpty(out_SeriesName) Or out_SeasonsDT.Rows.Count = 0]" DisplayName="If - Checking post condition" sap:VirtualizedContainerService.HintSize="847,153" sap2010:WorkflowViewState.IdRef="If_2">
                   <sap:WorkflowViewStateService.ViewState>
                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
                       <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
@@ -383,7 +378,7 @@
         </ui:RetryScope>
       </TryCatch.Try>
       <TryCatch.Catches>
-        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="422,21" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="404,21" sap2010:WorkflowViewState.IdRef="Catch`1_1">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -413,7 +408,7 @@
             </Sequence>
           </ActivityAction>
         </Catch>
-        <Catch x:TypeArguments="s:SystemException" sap:VirtualizedContainerService.HintSize="422,21" sap2010:WorkflowViewState.IdRef="Catch`1_2">
+        <Catch x:TypeArguments="s:SystemException" sap:VirtualizedContainerService.HintSize="404,21" sap2010:WorkflowViewState.IdRef="Catch`1_2">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">False</x:Boolean>

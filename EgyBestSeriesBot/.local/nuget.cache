@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "po3HsqUbGAEmAJVGKSA+NIxxkLSs8pEVA0jd59Z3p/RhhE8ORkdPTCcuCkMyPdN0srgHPc9F6fhfYDfel7eTZg==",
+  "dgSpecHash": "oVA7Wz9m1eCabtCdVYfXhyKMHypPVj12TOgomk+pQWSyqp6wIKREk7f06uRelIUaWLeDsZadxh9YYv/bCrHzHw==",
   "success": true,
   "projectFilePath": "E:\\Projects\\RPA\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local\\",
   "expectedPackageFiles": [
@@ -13,6 +13,7 @@
     "C:\\Users\\hp\\.nuget\\packages\\closedxml\\0.87.1\\closedxml.0.87.1.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\csvhelper\\2.13.5\\csvhelper.2.13.5.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\documentformat.openxml\\2.5.0\\documentformat.openxml.2.5.0.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\edge_libraries\\1.0.0-alpha.6\\edge_libraries.1.0.0-alpha.6.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\extended.wpf.toolkit\\3.8.1\\extended.wpf.toolkit.3.8.1.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\google.apis\\1.43.0\\google.apis.1.43.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\google.apis.auth\\1.43.0\\google.apis.auth.1.43.0.nupkg.sha512",
@@ -45,7 +46,6 @@
     "C:\\Users\\hp\\.nuget\\packages\\microsoft.identity.client\\4.14.0\\microsoft.identity.client.4.14.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\microsoft.rest.clientruntime\\2.3.21\\microsoft.rest.clientruntime.2.3.21.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\microsoft.visualstudio.ole.interop\\7.10.6071\\microsoft.visualstudio.ole.interop.7.10.6071.nupkg.sha512",
-    "C:\\Users\\hp\\.nuget\\packages\\my_edge_libraries\\1.0.0-alpha.2\\my_edge_libraries.1.0.0-alpha.2.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\namedpipewrapper\\1.5.0\\namedpipewrapper.1.5.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\nlog\\4.5.11\\nlog.4.5.11.nupkg.sha512",
@@ -80,13 +80,5 @@
     "C:\\Users\\hp\\.nuget\\packages\\uipath.uiautomation.activities\\20.10.9\\uipath.uiautomation.activities.20.10.9.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\uipath.vision\\2.2.0\\uipath.vision.2.2.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "filePath": "E:\\Projects\\RPA\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local",
-      "message": "Problem reading the cache file E:\\Projects\\RPA\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local\\nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }
