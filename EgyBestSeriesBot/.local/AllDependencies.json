@@ -6176,15 +6176,15 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\hp\\.nuget\\packages\\": {}
+    "C:\\Users\\DELL\\.nuget\\packages\\": {}
   },
   "project": {
     "restore": {
       "projectUniqueName": "EgyBestSeriesBot",
       "projectName": "EgyBestSeriesBot",
-      "projectPath": "E:\\Projects\\RPA\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local",
-      "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
-      "outputPath": "E:\\Projects\\RPA\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local"
+      "projectPath": "E:\\MyProjects\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local",
+      "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+      "outputPath": "E:\\MyProjects\\UiPath\\EgyBestSeriesBot\\EgyBestSeriesBot\\.local"
     },
     "frameworks": {
       "net461": {
@@ -6220,7 +6220,7 @@
             "version": "[20.10.9, 20.10.9]"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\hp\\AppData\\Local\\UiPath\\app-21.2.0-beta0044\\runtime.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\DELL\\AppData\\Local\\UiPath\\app-21.4.4\\runtime.json"
       }
     }
   }

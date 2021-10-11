@@ -1,6 +1,6 @@
 <Activity mc:Ignorable="sap sap2010" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1240,672" sap2010:WorkflowViewState.IdRef="Main_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <TextExpression.NamespacesForImplementation>
-    <scg:List x:TypeArguments="x:String" Capacity="54">
+    <scg:List x:TypeArguments="x:String" Capacity="33">
       <x:String>System.Activities</x:String>
       <x:String>System.Activities.Statements</x:String>
       <x:String>System.Activities.Expressions</x:String>
@@ -30,10 +30,14 @@
       <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
       <x:String>System.ComponentModel</x:String>
       <x:String>System.Xml.Serialization</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>UiPath.Mail</x:String>
+      <x:String>UiPath.Mail.SMTP.Activities</x:String>
+      <x:String>UiPath.Mail.Activities</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
-    <scg:List x:TypeArguments="AssemblyReference" Capacity="30">
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="31">
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
@@ -63,6 +67,8 @@
       <AssemblyReference>UiPath.Form.Activities</AssemblyReference>
       <AssemblyReference>UiPath.UIAutomationNext</AssemblyReference>
       <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:Annotation.AnnotationText="Description:&#xA;This bot takes a series' links from the user, along with the required seasons and quality. Then creates a folder for each series that contains text files with the downloadable links of the episodes for each season (All of these folders are created in the following path: &quot;C:\EgyBestBot&quot;).&#xA;&#xA;Pre-condition:&#xA;The user must provide the series link(s).&#xA;&#xA;Post-condition:&#xA;All the required serieses are processed successfully.&#xA;" DisplayName="Main" sap:VirtualizedContainerService.HintSize="242,607" sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -183,14 +189,37 @@
             <ActivityAction.Argument>
               <DelegateInArgument x:TypeArguments="s:Exception" Name="Ex" />
             </ActivityAction.Argument>
-            <ui:LogMessage DisplayName="Log Message - System.Exception" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Fatal" Message="[&quot;Main, System.Exception&quot; +vbCr+&#xA;&quot;Message : &quot; + Ex.Message +vbCr+&#xA;&quot;Source : &quot; + Ex.Source]">
+            <Sequence DisplayName="Sequence - Ex" sap:VirtualizedContainerService.HintSize="376,335" sap2010:WorkflowViewState.IdRef="Sequence_5">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="x:String" Name="ScreenshotPath" />
+              </Sequence.Variables>
               <sap:WorkflowViewStateService.ViewState>
                 <scg:Dictionary x:TypeArguments="x:String, x:Object">
                   <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
                 </scg:Dictionary>
               </sap:WorkflowViewStateService.ViewState>
-            </ui:LogMessage>
+              <ui:LogMessage DisplayName="Log Message - System.Exception" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Fatal" Message="[&quot;Main, System.Exception&quot; +vbCr+&#xA;&quot;Message : &quot; + Ex.Message +vbCr+&#xA;&quot;Source : &quot; + Ex.Source]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:LogMessage>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap:VirtualizedContainerService.HintSize="334,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Utility\TakeScreenshot.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InOutArgument x:TypeArguments="x:String" x:Key="io_FilePath">
+                    <mva:VisualBasicReference x:TypeArguments="x:String" ExpressionText="ScreenshotPath" />
+                  </InOutArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="in_Folder">
+                    <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="Config(&quot;Exceptions Screenshots&quot;).ToString" />
+                  </InArgument>
+                  <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">
+                    <mva:VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="Config" />
+                  </InArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+            </Sequence>
           </ActivityAction>
         </Catch>
       </TryCatch.Catches>
