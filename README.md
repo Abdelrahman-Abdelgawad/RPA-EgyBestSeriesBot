@@ -4,7 +4,9 @@ This bot takes a series' links from the user, along with the required seasons an
 ___________________________________________________________________________________________
 
 Project Authors:
+
 [Abdelrahman Abdelgawad](https://www.linkedin.com/in/abdelrahman-abdelgawad)
+
 [Sherif Radwan](https://www.linkedin.com/in/sherif-radwan)
 
 ___________________________________________________________________________________________
