@@ -11,5 +11,5 @@ This bot takes a series' links from the user, along with the required seasons an
 
 ## Recorded Video for the Process Running End-To-End:
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/R1-405ewOCA/0.jpg)](https://youtu.be/R1-405ewOCA)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/glB0u7xhz-k/0.jpg)](https://youtu.be/glB0u7xhz-k)
 
