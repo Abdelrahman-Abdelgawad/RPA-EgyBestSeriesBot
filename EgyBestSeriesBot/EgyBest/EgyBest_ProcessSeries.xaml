@@ -11,7 +11,7 @@
   <sap:VirtualizedContainerService.HintSize>1240,612</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>EgyBest_ProcessSeries_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
-    <scg:List x:TypeArguments="x:String" Capacity="28">
+    <scg:List x:TypeArguments="x:String" Capacity="56">
       <x:String>System.Activities</x:String>
       <x:String>System.Activities.Statements</x:String>
       <x:String>System.Activities.Expressions</x:String>
@@ -71,7 +71,6 @@
       <AssemblyReference>UiPath.Mail</AssemblyReference>
       <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
       <AssemblyReference>System.Collections.Immutable</AssemblyReference>
-      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:Annotation.AnnotationText="Description:&#xA;Process each required season in the current series. Then save the downloadable links in the current series folder.&#xA;&#xA;Pre-condition:&#xA;The passed seasons datatable and the name of the series are not empty.&#xA;&#xA;Post-condition:&#xA;All the required seasons in the current series are processed successfully.&#xA;" DisplayName="EgyBest_ProcessSeries" sap:VirtualizedContainerService.HintSize="242,547" sap2010:WorkflowViewState.IdRef="Sequence_7">
@@ -89,7 +88,7 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </ui:LogMessage>
-    <TryCatch DisplayName="Try Catch - ProcessSeries" sap:VirtualizedContainerService.HintSize="438,315" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+    <TryCatch DisplayName="Try Catch - ProcessSeries" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="TryCatch_1">
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
           <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -168,18 +167,10 @@
                   </sap:WorkflowViewStateService.ViewState>
                   <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke EgyBest_ProcessSeason workflow" sap:VirtualizedContainerService.HintSize="334,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="EgyBest\EgyBest_ProcessSeason.xaml">
                     <ui:InvokeWorkflowFile.Arguments>
-                      <InArgument x:TypeArguments="x:String" x:Key="in_SeasonURL">
-                        <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="row(&quot;URL&quot;).ToString" />
-                      </InArgument>
-                      <InArgument x:TypeArguments="x:String" x:Key="in_ReqQuality">
-                        <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="in_ReqQuality" />
-                      </InArgument>
-                      <OutArgument x:TypeArguments="x:String" x:Key="out_SeasonDownloadLinks">
-                        <mva:VisualBasicReference x:TypeArguments="x:String" ExpressionText="SeasonDownloadLinks" />
-                      </OutArgument>
-                      <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">
-                        <mva:VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="in_Config" />
-                      </InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_SeasonURL">[row("URL").ToString]</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_ReqQuality">[in_ReqQuality]</InArgument>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_SeasonDownloadLinks">[SeasonDownloadLinks]</OutArgument>
+                      <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
                     </ui:InvokeWorkflowFile.Arguments>
                   </ui:InvokeWorkflowFile>
                   <ui:WriteTextFile DisplayName="Write Text File - Current season file" FileName="[Path.Combine(in_Config(&quot;EgyBestBotFolderPath&quot;).ToString, in_SeriesName, row(&quot;Name&quot;).ToString + &quot;.txt&quot;)]" sap:VirtualizedContainerService.HintSize="334,132" sap2010:WorkflowViewState.IdRef="WriteTextFile_1" Text="[SeasonDownloadLinks.Trim]" />

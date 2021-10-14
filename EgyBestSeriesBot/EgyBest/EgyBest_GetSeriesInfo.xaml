@@ -11,7 +11,7 @@
   <sap:VirtualizedContainerService.HintSize>1240,612</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>EgyBest_GetSeriesInfo_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
-    <scg:List x:TypeArguments="x:String" Capacity="29">
+    <scg:List x:TypeArguments="x:String" Capacity="30">
       <x:String>System.Activities</x:String>
       <x:String>System.Activities.Statements</x:String>
       <x:String>System.Activities.Expressions</x:String>
@@ -41,10 +41,11 @@
       <x:String>UiPath.Form.Activities</x:String>
       <x:String>System.ComponentModel</x:String>
       <x:String>System.Xml.Serialization</x:String>
+      <x:String>System.Text.RegularExpressions</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
-    <scg:List x:TypeArguments="AssemblyReference" Capacity="56">
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="28">
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
@@ -73,7 +74,6 @@
       <AssemblyReference>UiPath.Excel</AssemblyReference>
       <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
       <AssemblyReference>System.Collections.Immutable</AssemblyReference>
-      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:Annotation.AnnotationText="Description:&#xA;Gets the following info from the user: (Series link, required seasons and required quality). Then scraps the required seasons and pass the information as output arguments.&#xA;&#xA;Pre-condition:&#xA;MSEdge is open.&#xA;&#xA;Post-condition:&#xA;Output arguments are in a correct format.&#xA;" DisplayName="EgyBest_GetSeriesInfo" sap:VirtualizedContainerService.HintSize="242,547" sap2010:WorkflowViewState.IdRef="Sequence_7">
@@ -102,7 +102,7 @@
         <ui:RetryScope DisplayName="Retry Scope - GetSeriesInfo" sap:VirtualizedContainerService.HintSize="334,240" sap2010:WorkflowViewState.IdRef="RetryScope_1" NumberOfRetries="[CInt(in_Config(&quot;NumOfRetries&quot;))]" RetryInterval="[TimeSpan.Parse(in_Config(&quot;RetryInterval&quot;).ToString)]">
           <ui:RetryScope.ActivityBody>
             <ActivityAction>
-              <Sequence DisplayName="Action" sap:VirtualizedContainerService.HintSize="889,2539" sap2010:WorkflowViewState.IdRef="Sequence_8">
+              <Sequence DisplayName="Action" sap:VirtualizedContainerService.HintSize="889,2696" sap2010:WorkflowViewState.IdRef="Sequence_8">
                 <Sequence.Variables>
                   <Variable x:TypeArguments="x:Boolean" Default="False" Name="IsUserFormDismissed" />
                   <Variable x:TypeArguments="x:String" Name="SeriesLink" />
@@ -185,6 +185,19 @@
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
                 </ui:GetValue>
+                <Assign sap2010:Annotation.AnnotationText="- Removing all the characters forbidded by the windows operating system from the output series name. " DisplayName="Assign - Editting series name" sap:VirtualizedContainerService.HintSize="847,117" sap2010:WorkflowViewState.IdRef="Assign_10">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[out_SeriesName]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[Regex.Replace(out_SeriesName, ("[" + String.Concat(Path.GetInvalidFileNameChars) + "]"), String.Empty)]</InArgument>
+                  </Assign.Value>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </Assign>
                 <ui:ExtractData DelayBetweenPagesMS="{x:Null}" MaxNumberOfResults="{x:Null}" NextLinkSelector="{x:Null}" SimulateClick="{x:Null}" sap2010:Annotation.AnnotationText="Extracts the seasons Names and URLs of the series." DataTable="[TempSeasonsDT]" DisplayName="Extract Structured Data - Seasons " ExtractMetadata="&lt;extract&gt;&lt;column exact='1' name='Name' attr='text' name2='URL' attr2='href'&gt;&lt;webctrl tag='div' idx='2'/&gt;&lt;webctrl tag='div' idx='2'/&gt;&lt;webctrl tag='div' idx='1'/&gt;&lt;webctrl tag='a'/&gt;&lt;webctrl tag='span' idx='1'/&gt;&lt;/column&gt;&lt;/extract&gt;" sap:VirtualizedContainerService.HintSize="847,137" sap2010:WorkflowViewState.IdRef="ExtractData_1">
                   <ui:ExtractData.Target>
                     <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="b0c2f76e-bc44-47b5-adbd-1ff1e34f91e8" InformativeScreenshot="0febf1fde6988ea00cea8b92af27333b" Selector="&lt;html app='msedge.exe' title='*EgyBest' /&gt;&lt;webctrl id='mainLoad' tag='DIV' /&gt;" WaitForReady="COMPLETE">
