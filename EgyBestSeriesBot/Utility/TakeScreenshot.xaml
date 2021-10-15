@@ -67,6 +67,7 @@
       <AssemblyReference>UiPath.Excel</AssemblyReference>
       <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
       <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:Annotation.AnnotationText="Description:&#xA;Capture a screenshot, log its name and location and save it with the PNG extension. If no specific filepath is passed as argument, it saves the image in the folder specified by in_Folder.&#xA;&#xA;Pre-condition:&#xA;N/A&#xA;&#xA;Post-condition:&#xA;Screenshot of the whole screen is taken and saved successfully.&#xA;" DisplayName="TakeScreenshot" sap:VirtualizedContainerService.HintSize="242,562" sap2010:WorkflowViewState.IdRef="Sequence_7">
@@ -84,7 +85,7 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </ui:LogMessage>
-    <TryCatch DisplayName="Try Catch - TakeScreenshot" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+    <TryCatch DisplayName="Try Catch - TakeScreenshot" sap:VirtualizedContainerService.HintSize="438,467" sap2010:WorkflowViewState.IdRef="TryCatch_1">
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
           <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -228,7 +229,7 @@
             <ActivityAction.Argument>
               <DelegateInArgument x:TypeArguments="s:Exception" Name="Ex" />
             </ActivityAction.Argument>
-            <ui:LogMessage DisplayName="Log Message - System.Exception" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Warn" Message="[&quot;TakeScreenshot, System.Exception&quot; +vbCr+&#xA;&quot;Message : &quot; + Ex.Message +vbCr+&#xA;&quot;Source : &quot; + Ex.Source]">
+            <ui:LogMessage DisplayName="Log Message - System.Exception" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Warn" Message="[&quot;TakeScreenshot, &quot; + Ex.GetType.ToString +vbCr+&#xD;&#xA;&quot;Message : &quot; + Ex.Message +vbCr+&#xD;&#xA;&quot;Source : &quot; + Ex.Source]">
               <sap:WorkflowViewStateService.ViewState>
                 <scg:Dictionary x:TypeArguments="x:String, x:Object">
                   <x:Boolean x:Key="IsExpanded">False</x:Boolean>
